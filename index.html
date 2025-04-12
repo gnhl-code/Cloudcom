@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do List</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="box">
+            <h1>To do list</h1>
+
+            <form id="myForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br>
+                <button type="submit">Login</button>
+            </form>
+
+            <a href="register.html"> <button>Register</button></a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+        
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+        
+            const data = {
+                'username': username,
+                'password': password
+            };
+        
+            console.log("Sending login request:", data);  // Log the data to verify what is being sent
+        
+            axios.post('http://127.0.0.1:8000/login/', data)
+                .then(function (response) {
+                    console.log(response);  // Debug the response
+                    if (response.data.status === 'Logged in') {
+                        document.cookie = 'username=' + username;
+                        window.location.replace("main.html");
+                    } else {
+                        alert('Invalid username or password');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response ? error.response.data : error.message);
+                    alert('An error occurred');
+                });
+        });        
+    </script>
+</body>
+</html>
